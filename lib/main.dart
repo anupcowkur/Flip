@@ -1,3 +1,4 @@
+import 'package:flip/paper.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(Flip());
@@ -23,10 +24,6 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: Text(
-      'Flip',
-    )));
+    return Scaffold(body: Paper(color: Colors.purpleAccent));
   }
 }
