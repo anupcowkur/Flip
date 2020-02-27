@@ -14,24 +14,20 @@ class Paper extends StatefulWidget {
 
 class _PaperState extends State<Paper> {
   double _progress = 0.0;
-  double _initial = 0.0;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onPanStart: (details) {
-        _initial = details.globalPosition.dx;
-      },
+      behavior: HitTestBehavior.opaque,
       onPanUpdate: (details) {
-        double distance = details.globalPosition.dx - _initial;
-        double percentageAddition = distance / 200;
         setState(() {
-          _progress = (_progress + percentageAddition).clamp(0.0, 100.0);
-          //Todo: make this work
+          _progress =
+              details.localPosition.dx / MediaQuery.of(context).size.width;
+          print(_progress);
         });
       },
       onPanEnd: (details) {
-        _initial = 0.0;
+        _animateToFinalProgress();
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -42,6 +38,18 @@ class _PaperState extends State<Paper> {
         ),
       ),
     );
+  }
+
+  void _animateToFinalProgress() {
+    if (_progress < 0.5) {
+      setState(() {
+        _progress = 0.0;
+      });
+    } else {
+      setState(() {
+        _progress = 1.0;
+      });
+    }
   }
 }
 
