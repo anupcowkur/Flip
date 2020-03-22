@@ -39,9 +39,12 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
             _initialPanDirection = getInitialPanDirection(details);
           }
 
+          // Disallow page turns that go from left to right. We want
+          // the paper to only go right to left.
           if (_initialPanDirection != InitialPanDirection.LEFT) {
             return;
           }
+
           _progress =
               details.localPosition.dx / MediaQuery.of(context).size.width;
         });
