@@ -19,14 +19,16 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
   double _progress = 1.0;
   InitialPanDirection _initialPanDirection = InitialPanDirection.UNINITIALIZED;
 
-  Animation<double> animation;
   AnimationController controller;
+  Animation curve;
+  Animation<double> animation;
 
   @override
   void initState() {
     super.initState();
     controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    curve = CurvedAnimation(parent: controller, curve: Curves.easeOut);
   }
 
   @override
@@ -74,18 +76,20 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
   void _animateToFinalProgress() {
     var tweenEnd = _progress < 0.3 ? -1.0 : 1.0;
 
-    animation =
-        Tween<double>(begin: _progress, end: tweenEnd).animate(controller)
-          ..addListener(() {
-            setState(() {
-              _progress = animation.value;
-            });
-          })
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.dismissed) {
-              controller.forward();
-            }
-          });
+    Animation curve =
+        CurvedAnimation(parent: controller, curve: Curves.easeOut);
+
+    animation = Tween<double>(begin: _progress, end: tweenEnd).animate(curve)
+      ..addListener(() {
+        setState(() {
+          _progress = animation.value;
+        });
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      });
 
     controller.reset();
     controller.forward();
