@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 
+enum InitialPanDirection { UNINITIALIZED, RIGHT, LEFT }
+
 class Paper extends StatefulWidget {
   @required
   final Color color;
@@ -15,6 +17,7 @@ class Paper extends StatefulWidget {
 
 class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
   double _progress = 1.0;
+  InitialPanDirection _initialPanDirection = InitialPanDirection.UNINITIALIZED;
 
   Animation<double> animation;
   AnimationController controller;
@@ -32,12 +35,20 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
       behavior: HitTestBehavior.opaque,
       onPanUpdate: (details) {
         setState(() {
+          if (_initialPanDirection == InitialPanDirection.UNINITIALIZED) {
+            _initialPanDirection = getInitialPanDirection(details);
+          }
+
+          if (_initialPanDirection != InitialPanDirection.LEFT) {
+            return;
+          }
           _progress =
               details.localPosition.dx / MediaQuery.of(context).size.width;
         });
       },
       onPanEnd: (details) {
         _animateToFinalProgress();
+        _resetInitialPanDirection();
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -48,6 +59,13 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  InitialPanDirection getInitialPanDirection(DragUpdateDetails details) {
+    if (details.delta.dx > 0) {
+      return _initialPanDirection = InitialPanDirection.RIGHT;
+    }
+    return _initialPanDirection = InitialPanDirection.LEFT;
   }
 
   void _animateToFinalProgress() {
@@ -68,6 +86,12 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
 
     controller.reset();
     controller.forward();
+  }
+
+  void _resetInitialPanDirection() {
+    setState(() {
+      _initialPanDirection = InitialPanDirection.UNINITIALIZED;
+    });
   }
 
   @override
