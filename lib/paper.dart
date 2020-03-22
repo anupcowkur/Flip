@@ -74,7 +74,7 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
   }
 
   void _animateToFinalProgress() {
-    var tweenEnd = _progress < 0.1 ? -1.0 : 1.0;
+    var tweenEnd = _progress < 0.3 ? -1.0 : 1.0;
 
     Animation curve =
         CurvedAnimation(parent: controller, curve: Curves.easeOut);
