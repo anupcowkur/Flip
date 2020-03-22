@@ -190,9 +190,18 @@ class PaperPainter extends CustomPainter {
     var rightDropShadowRect =
         Rect.fromLTRB(foldX, 0, foldX + rightShadowWidth, canvasSize.height);
 
+    const DROP_SHADOW_GRADIENT_START_COLOR_MAX_OPACITY = 0.17;
+
+    var dropShadowGradientStartColorOpacity = strength * 0.2;
+    if (dropShadowGradientStartColorOpacity >
+        DROP_SHADOW_GRADIENT_START_COLOR_MAX_OPACITY) {
+      dropShadowGradientStartColorOpacity =
+          DROP_SHADOW_GRADIENT_START_COLOR_MAX_OPACITY;
+    }
+
     final Gradient rightDropShadowGradient = new LinearGradient(
       colors: <Color>[
-        Color.fromRGBO(0, 0, 0, strength * 0.2),
+        Color.fromRGBO(0, 0, 0, dropShadowGradientStartColorOpacity),
         Color.fromRGBO(0, 0, 0, 0),
       ],
       stops: [
