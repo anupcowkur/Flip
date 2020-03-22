@@ -141,9 +141,12 @@ class PaperPainter extends CustomPainter {
         verticalPerspectiveDent, canvasSize);
     drawLeftDropShadow(
         foldX, foldWidth, leftShadowWidth, canvasSize, strength, canvas);
-    drawRightDropShadow(foldX, rightShadowWidth, canvasSize, strength, canvas);
     drawFoldedPaperWithShadow(foldX, paperShadowWidth, canvasSize,
         verticalPerspectiveDent, foldWidth, canvas);
+    if (progress > -1.0) {
+      drawRightDropShadow(
+          foldX, rightShadowWidth, canvasSize, strength, canvas);
+    }
   }
 
   void drawLeftSharpShadow(double strength, Canvas canvas, double foldX,
@@ -184,10 +187,6 @@ class PaperPainter extends CustomPainter {
 
   void drawRightDropShadow(double foldX, double rightShadowWidth,
       Size canvasSize, double strength, Canvas canvas) {
-    if (progress <= -1.0) {
-      return;
-    }
-
     var rightDropShadowRect =
         Rect.fromLTRB(foldX, 0, foldX + rightShadowWidth, canvasSize.height);
 
