@@ -52,7 +52,7 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
         });
       },
       onPanEnd: (details) {
-        _animateToFinalProgress();
+        _animateToFinalProgress(details.velocity);
         _resetInitialPanDirection();
       },
       child: Container(
@@ -73,8 +73,10 @@ class _PaperState extends State<Paper> with SingleTickerProviderStateMixin {
     return _initialPanDirection = InitialPanDirection.LEFT;
   }
 
-  void _animateToFinalProgress() {
-    var tweenEnd = _progress < 0.2 ? -1.0 : 1.0;
+  void _animateToFinalProgress(Velocity velocity) {
+    var tweenEnd = (velocity.pixelsPerSecond.dx.abs() > 2000 || _progress < 0.2)
+        ? -1.0
+        : 1.0;
 
     Animation curve =
         CurvedAnimation(parent: controller, curve: Curves.easeOut);
