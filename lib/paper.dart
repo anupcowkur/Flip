@@ -225,7 +225,6 @@ class PaperPainter extends CustomPainter {
       double verticalPerspectiveDent,
       double foldWidth,
       Canvas canvas) {
-    // Gradient applied to the folded paper (highlights & shadows)
     final LinearGradient foldGradient = new LinearGradient(
       colors: <Color>[
         Color(0xFFFAFAFA),
